@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
 from attentracker import app, db, bcrypt
-from attentracker.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from attentracker.forms import CheckoutForm, LoginForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -8,22 +8,22 @@ names = [
     {
         'name': 'Zymiere Hargrove',
         'location': 'Room 46',
-        'stauts': 'Present',
+        'status': 'Present',
     },
     {
         'name': 'Ayden Parker',
         'location': 'Room 46',
-        'stauts': 'Present',
+        'status': 'Present',
     },
     {
         'name': 'Tahj Austion',
         'location': 'Room 46',
-        'stauts': 'Present',
+        'status': 'Present',
     },
     {
         'name': 'Doc Peterson',
         'location': 'Room 46',
-        'stauts': 'Present',
+        'status': 'Present',
     }
 ]
 
@@ -63,3 +63,18 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route("/checkout")
+def checkout():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = CheckoutForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(firstname=form.firstname.data, lastname=form.lastname.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Youve been checked out.', 'success')
+        return redirect(url_for('checkout'))
+    return render_template('checkout.html', title='Checkout', form=form)

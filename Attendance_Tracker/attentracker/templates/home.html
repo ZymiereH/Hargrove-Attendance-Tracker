@@ -1,14 +1,13 @@
 {% extends "design.html" %}
 {% block content%}
-    {% for names in posts %}
+    {% for names in names %}
         <article class="media content-section">
             <div class="media-body">
                 <div class="article-metadata">
-                    <a class="mr-2" href="#">{{ names.author }}</a>
-                    <small class="text-muted">{{ names.date_posted }}</small>
+                    <a class="mr-2" href="#">{{ names.name }}</a>
+                    <small class="text-muted">{{ names.location }}</small>
                 </div>
-                <h2><a class="article-title" href="#">{{ names.title }}</a></h2>
-                <p class="article-content">{{ names.content }}</p>
+                <h4><a class="article-title" href="#">{{ names.status }}</a></h4>
             </div>
         </article>
     {% endfor %}
