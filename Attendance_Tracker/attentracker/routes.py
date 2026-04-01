@@ -34,6 +34,7 @@ def home():
 
 
 @app.route("/admin")
+@login_required
 def admin():
     return render_template('admin.html', title='Admin Page')
 
@@ -45,15 +46,11 @@ def student():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
+        if form.email.data == 'admin@tracker.com' and form.password.data == 'password':
+            flash('You are now logged in as an Admin', 'success')
+            return redirect(url_for('home'))
         else:
             flash('Login unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title = 'Login', form=form) 
@@ -78,3 +75,5 @@ def checkout():
         flash('Youve been checked out.', 'success')
         return redirect(url_for('checkout'))
     return render_template('checkout.html', title='Checkout', form=form)
+
+

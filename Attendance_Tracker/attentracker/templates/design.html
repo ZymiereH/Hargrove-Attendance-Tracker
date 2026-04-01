@@ -30,9 +30,14 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-              <a class="nav-item nav-link" href="/admin">Admin Login</a>
-              <a class="nav-item nav-link" href="/student">Student Page</a>
-              <a class="nav-item nav-link" href="/checkout">Checkout</a>
+              {% if current_user.is_authenticated %}
+                <a class="nav-item nav-link" href="/admin">Admin Page</a>
+                <a class="nav-item nav-link" href="/logout">Logout</a>
+              {% else %}
+                <a class="nav-item nav-link" href="/login">Admin Login</a>
+                <a class="nav-item nav-link" href="/student">Student Page</a>
+                <a class="nav-item nav-link" href="/checkout">Checkout</a>
+              {% endif %}
             </div>
           </div>
         </div>
